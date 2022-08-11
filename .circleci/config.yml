@@ -1,6 +1,36 @@
 version: 2.1
 
 commands:
+  install_awscli:
+    description: "Installs AWS_CLI"
+    steps:
+      - run: 
+          name: "Install AWS CLI"
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+
+  install_ansible:
+    description: "Installs Ansible on Ubuntu images"
+    steps:
+      - run: 
+          name: "Install Ansible"
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common -y
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible -y
+            
+  # install_nodejs:
+  #   description: "This command installs NodeJS on the docker image"
+  #   steps:
+  #     - run:
+  #         name: "Installing node js"
+  #         command: |
+  #           curl -fsSL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+  #           sudo apt install -y nodejs
+
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
@@ -147,14 +177,14 @@ jobs:
             --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
             --tags project=udapeople
 
-      - run:
-          name: Create frontend infra
-          command: |
-            aws cloudformation deploy \
-            --template-file .circleci/files/frontend.yml \
-            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-            --tags project=udapeople   
+      # - run:
+      #     name: Create frontend infra
+      #     command: |
+      #       aws cloudformation deploy \
+      #       --template-file .circleci/files/frontend.yml \
+      #       --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+      #       --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+      #       --tags project=udapeople   
 
       - run:
           name: Add backend EC2 IP to ansible inventory file
@@ -169,26 +199,29 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
-      - destroy-environment     
+      # - destroy-environment     
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+  configure-infrastructure:
+    docker:
+      - image: cimg/base:2022.04
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["e1:40:8b:07:15:80:f1:f8:f4:51:d6:8c:6f:ff:de:63"]
+      - attach_workspace:
+            at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            - install_awscli
+            - install_ansible
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            cat inventory.txt
+            ansible-playbook -i inventory.txt configure-server.yml
+      # - destroy-environment
 
 #   run-migrations:
 #     docker:
@@ -306,24 +339,24 @@ jobs:
 workflows:
   default:
     jobs:
-      - build-frontend
-      - build-backend
-      - test-frontend:
-          requires: [build-frontend]
-      - test-backend:
-          requires: [build-backend]
-      - scan-backend:
-          requires: [build-backend]
-      - scan-frontend:
-          requires: [build-frontend]
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [master]
+      # - build-frontend
+      # - build-backend
+      # - test-frontend:
+      #     requires: [build-frontend]
+      # - test-backend:
+      #     requires: [build-backend]
+      # - scan-backend:
+      #     requires: [build-backend]
+      # - scan-frontend:
+      #     requires: [build-frontend]
+      - deploy-infrastructure
+          #requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+          # filters:
+          #   branches:
+          #     only: [master]
 
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
