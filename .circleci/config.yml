@@ -206,15 +206,12 @@ jobs:
       - image: cimg/base:2022.04
     steps:
       - checkout
+      - install_awscli
+      - install_ansible
       - add_ssh_keys:
           fingerprints: ["e1:40:8b:07:15:80:f1:f8:f4:51:d6:8c:6f:ff:de:63"]
       - attach_workspace:
             at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            - install_awscli
-            - install_ansible
       - run:
           name: Configure server
           command: |
