@@ -308,16 +308,18 @@ jobs:
             npm i
             npm run build
             cd ../
-            pwd 
-            ls
+            # pwd 
+            # ls
             tar -czf artifact.tar.gz backend
             pwd
-            ls 
+            # ls 
             cp /home/circleci/project/artifact.tar.gz .circleci/ansible/roles/deploy/files
-            pwd
-            cd backend 
+            cd /home/circleci
             ls
-            pwd 
+            # pwd
+            # cd backend 
+            # ls
+            # pwd 
       - run:
           name: Deploy backend
           command: |
@@ -442,7 +444,7 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      - deploy-infrastructure
+      # - deploy-infrastructure
           #requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches:
@@ -454,8 +456,8 @@ workflows:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
-      - deploy-backend:
-          requires: [deploy-infrastructure]
+      - deploy-backend
+          # requires: [deploy-infrastructure]
           # requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
