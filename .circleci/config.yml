@@ -311,6 +311,7 @@ jobs:
             tar -czf artifact.tar.gz backend
             ls 
             cp artifact.tar.gz .circleci/ansible/roles/deploy/files
+            
       - run:
           name: Deploy backend
           command: |
