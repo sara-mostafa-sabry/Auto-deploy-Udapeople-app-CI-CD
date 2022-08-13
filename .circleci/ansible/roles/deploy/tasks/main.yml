@@ -2,16 +2,15 @@
 - name: "Copy Backend file"
   copy:
     src:  /home/circleci/project/artifact.tar.gz
-    dest: /home/ubuntu
+    dest: /home/ubuntu/backend
 
 - name: "Unarchive backend file"
   ansible.builtin.shell: tar -xzf artifact.tar.gz
   args:
-    chdir: /home/ubuntu
+    chdir: /home/ubuntu/backend
 
 - name: "installing node"
   shell: |
-      pwd
       cd /home/ubuntu/backend
       npm i
 - name: "excuting with pm"
