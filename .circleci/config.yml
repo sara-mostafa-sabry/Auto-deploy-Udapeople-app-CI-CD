@@ -311,6 +311,7 @@ jobs:
             pwd 
             ls
             tar -czf artifact.tar.gz backend
+            pwd
             ls 
             cp /home/circleci/project/artifact.tar.gz .circleci/ansible/roles/deploy/files
             pwd
