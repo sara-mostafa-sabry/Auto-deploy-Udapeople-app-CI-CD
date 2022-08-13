@@ -291,38 +291,77 @@ jobs:
       - install_ansible
       - install_nodejs
       - add_ssh_keys:
-          fingerprints: ["e1:40:8b:07:15:80:f1:f8:f4:51:d6:8c:6f:ff:de:63"]
+          fingerprints: ["5f:14:6b:6c:f9:f7:cc:34:80:43:51:c2:fc:a9:67:89"]
       - attach_workspace:
           at: ~/
       - restore_cache:
-          keys: [backend-build]
+          keys: [backend-depnd]
       - run:
           name: Install dependencies
           command: |
             cd backend
             npm install
       - run:
-          name: archive and copy file 
+          name: package backend
           command: |
             cd backend
             npm i
             npm run build
             cd ../
             tar -czf artifact.tar.gz backend
-            cp /home/circleci/project/artifact.tar.gz .circleci/ansible/roles/deploy/files
+            cp artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:
           name: Deploy backend
           command: |
             export TYPEORM_MIGRATIONS_DIR=.migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts
-            pwd
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # - destroy-environment
       # - revert-migrations
+
+  # deploy-backend:
+  #   docker:
+  #     - image: cimg/base:2022.04
+  #   steps:
+  #     - checkout
+  #     - install_awscli
+  #     - install_ansible
+  #     - install_nodejs
+  #     - add_ssh_keys:
+  #         fingerprints: ["e1:40:8b:07:15:80:f1:f8:f4:51:d6:8c:6f:ff:de:63"]
+  #     - attach_workspace:
+  #         at: ~/
+  #     - restore_cache:
+  #         keys: [backend-build]
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           cd backend
+  #           npm install
+  #     - run:
+  #         name: archive and copy file 
+  #         command: |
+  #           cd backend
+  #           npm i
+  #           npm run build
+  #           cd ../
+  #           tar -czf artifact.tar.gz backend
+  #           cp /home/circleci/project/artifact.tar.gz .circleci/ansible/roles/deploy/files
+  #     - run:
+  #         name: Deploy backend
+  #         command: |
+  #           export TYPEORM_MIGRATIONS_DIR=.migrations
+  #           export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
+  #           export TYPEORM_MIGRATIONS=./migrations/*.ts
+  #           pwd
+  #           cd .circleci/ansible
+  #           echo "Contents  of the inventory.txt file is -------"
+  #           cat inventory.txt
+  #           ansible-playbook -i inventory.txt deploy-backend.yml
+  #     # - destroy-environment
+  #     # - revert-migrations
 
 #   deploy-frontend:
 #     docker:
