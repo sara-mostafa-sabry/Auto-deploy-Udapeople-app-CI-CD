@@ -310,7 +310,7 @@ jobs:
             cd ../
             tar -czf artifact.tar.gz backend
             ls 
-            cp artifact.tar.gz .circleci/ansible/roles/deploy/tasks/files
+            cp artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:
           name: Deploy backend
           command: |
@@ -439,10 +439,10 @@ workflows:
           #   branches:
           #     only: [master]
 
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      - run-migrations
-          # requires: [configure-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
