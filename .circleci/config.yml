@@ -302,14 +302,18 @@ jobs:
             cd backend
             npm install
       - run:
-          name: Deploy backend
+          name: archive file 
           command: |
             cd backend
             npm i
             npm run build
             cd ../
             tar -czf artifact.tar.gz backend
+            ls 
             cp artifact.tar.gz .circleci/ansible/roles/deploy/tasks/files
+      - run:
+          name: Deploy backend
+          command: |
             export TYPEORM_MIGRATIONS_DIR=.migrations
             export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
             export TYPEORM_MIGRATIONS=./migrations/*.ts
@@ -429,14 +433,14 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      - deploy-infrastructure
+      # - deploy-infrastructure
           #requires: [test-frontend, test-backend, scan-frontend, scan-backend]
           # filters:
           #   branches:
           #     only: [master]
 
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
       - run-migrations:
           requires: [configure-infrastructure]
       - deploy-frontend:
