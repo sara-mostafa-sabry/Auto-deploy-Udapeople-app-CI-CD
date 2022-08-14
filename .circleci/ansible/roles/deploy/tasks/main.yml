@@ -13,6 +13,7 @@
   shell: |
       cd /home/ubuntu/backend
       npm i
+      
 - name: "excuting with pm"
   shell: |
       cd /home/ubuntu/backend/dist
