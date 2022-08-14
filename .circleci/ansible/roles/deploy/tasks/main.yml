@@ -14,12 +14,18 @@
     src: /home/circleci/project/artifact.tar.gz
     dest: ~/backend-app
 
+- name: "installing npm"
+  become: true
+  apt:
+    name: ["npm"]
+    state: latest
+    update_cache: yes 
+
 - name: "install node dep"
   shell: |
     cd ~/backend-app
-    npm  -v
     npm install
-
+    npm -v 
 # ---
 # - name: "Copy Backend file"
 #   copy:
