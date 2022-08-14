@@ -17,6 +17,7 @@
 - name: "install node dep"
   shell: |
     cd ~/backend-app
+    npm  -v
     npm install
 
 # ---
