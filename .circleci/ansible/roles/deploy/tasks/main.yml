@@ -9,11 +9,16 @@
   args:
     chdir: /home/ubuntu
 
-- name: "installing node"
+- name: "install node dep"
   shell: |
-      cd /home/ubuntu/backend
-      npm i
-      
+    cd /home/ubuntu/backend
+    npm install
+
+# - name: "installing node"
+#   shell: |
+#       cd /home/ubuntu/backend
+#       npm i
+
 - name: "excuting with pm"
   shell: |
       cd /home/ubuntu/backend/dist
