@@ -1,23 +1,44 @@
 ---
+- name: "create backend app directory"
+  file:
+    path: ~/backend-app
+    state: directory
+
 - name: "Copy Backend file"
   copy:
     src:  /home/circleci/project/artifact.tar.gz
-    dest: /home/ubuntu
+    dest: ~/backend-app
 
-- name: "Unarchive backend file"
-  ansible.builtin.shell: tar -xzf artifact.tar.gz
-  args:
-    chdir: /home/ubuntu
+- name: "unarchive backend files"
+  unarchive:
+    src: artifact.tar.gz
+    dest: ~/backend-app
 
 - name: "install node dep"
   shell: |
-    cd /home/ubuntu/backend
+    cd ~/backend-app
     npm install
 
-# - name: "installing node"
+# ---
+# - name: "Copy Backend file"
+#   copy:
+#     src:  /home/circleci/project/artifact.tar.gz
+#     dest: /home/ubuntu
+
+# - name: "Unarchive backend file"
+#   ansible.builtin.shell: tar -xzf artifact.tar.gz
+#   args:
+#     chdir: /home/ubuntu
+
+# - name: "install node dep"
 #   shell: |
-#       cd /home/ubuntu/backend
-#       npm i
+#     cd /home/ubuntu/backend
+#     npm install
+
+# # - name: "installing node"
+# #   shell: |
+# #       cd /home/ubuntu/backend
+# #       npm i
 
 - name: "excuting with pm"
   shell: |
