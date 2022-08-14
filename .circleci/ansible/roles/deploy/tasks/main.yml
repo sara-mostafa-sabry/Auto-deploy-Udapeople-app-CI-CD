@@ -25,33 +25,14 @@
   shell: |
     cd ~/backend-app
     npm install
-    npm -v 
-# ---
-# - name: "Copy Backend file"
-#   copy:
-#     src:  /home/circleci/project/artifact.tar.gz
-#     dest: /home/ubuntu
 
-# - name: "Unarchive backend file"
-#   ansible.builtin.shell: tar -xzf artifact.tar.gz
-#   args:
-#     chdir: /home/ubuntu
-
-# - name: "install node dep"
-#   shell: |
-#     cd /home/ubuntu/backend
-#     npm install
-
-# # - name: "installing node"
-# #   shell: |
-# #       cd /home/ubuntu/backend
-# #       npm i
-
-- name: "excuting with pm"
+- name: "executing node app with PM2"
   shell: |
-      cd /home/ubuntu/backend/dist
-      pm2 stop default
-      pm2 start main.js
+    cd ~/backend-app/dist
+    pm2 stop default
+    pm2 start main.js
+  register: execute_node
+
 - name: "pm2 server start"
   become: true
   shell: |
