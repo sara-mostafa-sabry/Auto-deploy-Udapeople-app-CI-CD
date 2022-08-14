@@ -177,14 +177,14 @@ jobs:
             --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
             --tags project=udapeople
 
-      # - run:
-      #     name: Create frontend infra
-      #     command: |
-      #       aws cloudformation deploy \
-      #       --template-file .circleci/files/frontend.yml \
-      #       --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #       --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
-      #       --tags project=udapeople   
+      - run:
+          name: Create frontend infra
+          command: |
+            aws cloudformation deploy \
+            --template-file .circleci/files/frontend.yml \
+            --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
+            --tags project=udapeople   
 
       - run:
           name: Add backend EC2 IP to ansible inventory file
@@ -291,7 +291,7 @@ jobs:
       - install_ansible
       - install_nodejs
       - add_ssh_keys:
-          fingerprints: ["5f:14:6b:6c:f9:f7:cc:34:80:43:51:c2:fc:a9:67:89"]
+          fingerprints: ["e1:40:8b:07:15:80:f1:f8:f4:51:d6:8c:6f:ff:de:63"]
       - attach_workspace:
           at: ~/
       - restore_cache:
@@ -313,13 +313,10 @@ jobs:
       - run:
           name: Deploy backend
           command: |
-            # export TYPEORM_MIGRATIONS_DIR=.migrations
-            # export TYPEORM_ENTITIES=./modules/domain/**/*.entity{.ts,.js}
-            # export TYPEORM_MIGRATIONS=./migrations/*.ts
             cd .circleci/ansible
             ansible-playbook -i inventory.txt deploy-backend.yml
-      # - destroy-environment
-      # - revert-migrations
+      - destroy-environment
+      - revert-migrations
 
   # deploy-backend:
   #   docker:
@@ -478,15 +475,14 @@ workflows:
           #   branches:
           #     only: [master]
 
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
-      - deploy-backend:
+      - configure-infrastructure:
           requires: [deploy-infrastructure]
-          # requires: [run-migrations]
+      - run-migrations:
+          requires: [configure-infrastructure]
+      - deploy-frontend:
+          requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:
