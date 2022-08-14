@@ -14,25 +14,25 @@
     src: /home/circleci/project/artifact.tar.gz
     dest: ~/backend-app
 
-- name: "installing npm"
-  become: true
-  apt:
-    name: ["npm"]
-    state: latest
-    update_cache: yes 
+# - name: "installing npm"
+#   become: true
+#   apt:
+#     name: ["npm"]
+#     state: latest
+#     update_cache: yes 
 
 - name: "install node dep"
   shell: |
     cd ~/backend-app
     npm install
 
-- name: "install pm2"
-  become: true
-  npm:
-    name: pm2
-    global: yes
-    production: yes
-    state: present
+# - name: "install pm2"
+#   become: true
+#   npm:
+#     name: pm2
+#     global: yes
+#     production: yes
+#     state: present
     
 - name: "executing node app with PM2"
   shell: |
