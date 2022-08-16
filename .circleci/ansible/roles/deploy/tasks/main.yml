@@ -1,18 +1,18 @@
 ---
 - name: "create backend app directory"
   file:
-    path: ~/backend-app
+    path: /home/ubuntu/backend-app
     state: directory
 
 - name: "Copy Backend file"
   copy:
     src:  /home/circleci/project/artifact.tar.gz
-    dest: ~/backend-app
+    dest: /home/ubuntu/backend-app
 
 - name: "unarchive backend files"
   unarchive:
     src: /home/circleci/project/artifact.tar.gz
-    dest: ~/backend-app
+    dest: /home/ubuntu/backend-app
 
 - name: "install node dep"
   shell: |
