@@ -11,8 +11,8 @@
 
 - name: "unarchive backend files" 
   ansible.builtin.shell: tar -xzf artifact.tar.gz
-    args:
-      chdir: /home/ubuntu
+  args:
+    chdir: /home/ubuntu
 
 - name: "install node dep"
   shell: |
