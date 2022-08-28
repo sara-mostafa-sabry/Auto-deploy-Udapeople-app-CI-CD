@@ -387,10 +387,10 @@ jobs:
       - revert-migrations
 
 
-cleanup:
-  docker:
-     - image: cimg/base:2022.04
-  steps:
+  cleanup:
+    docker:
+       - image: cimg/base:2022.04
+    steps:
       - checkout
       - install_awscli
       - run:
