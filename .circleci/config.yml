@@ -423,7 +423,8 @@ cleanup:
             then
               # your code here
             fi
-            
+
+
 workflows:
   default:
     jobs:
@@ -455,5 +456,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
