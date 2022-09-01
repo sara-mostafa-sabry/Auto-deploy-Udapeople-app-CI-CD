@@ -386,7 +386,6 @@ jobs:
       - destroy-environment
       - revert-migrations
 
-
   cleanup:
     docker:
        - image: cimg/base:2022.04
