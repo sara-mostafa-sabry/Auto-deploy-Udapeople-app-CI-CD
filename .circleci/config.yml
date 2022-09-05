@@ -328,9 +328,9 @@ jobs:
       - image: cimg/base:2022.04
     steps:
       - checkout
-      - run:
-          name: "Install tar and gzip"
-          command: yum install -y tar gzip
+      # - run:
+      #     name: "Install tar and gzip"
+      #     command: yum install -y tar gzip
       - install_awscli
       - install_nodejs
       - run:
