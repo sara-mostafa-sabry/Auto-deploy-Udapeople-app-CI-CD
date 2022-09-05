@@ -362,11 +362,13 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      # - attach_workspace:
-      #     at: ~/
       - run:
           name: Update cloudfront distribution
           command: |
+            aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
+              --no-paginate --output text >> old-workflow  
+            
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name "udapeople-CloudFront" \
@@ -374,18 +376,22 @@ jobs:
             --tags project=udapeople        
       - destroy-environment
       - revert-migrations
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/old-workflow
 
   cleanup:
     docker:
        - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get old stack workflow id
           command: |
-            export OldWorkflowID=$(aws cloudformation \
-              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text)
+            export OldWorkflowID=$(cat old-workflow)
             
             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
