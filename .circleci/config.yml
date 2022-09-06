@@ -385,7 +385,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/old-workflow
+            - project/.circleci/old-workflow
 
   cleanup:
     docker:
