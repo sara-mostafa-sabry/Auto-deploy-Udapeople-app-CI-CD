@@ -401,7 +401,6 @@ jobs:
             pwd 
             ls ~/
             cd ~/
-            cat ./.circleci/ansible/workflow.txt
             cat workflow.txt
             export OldWorkflowID=$(cat workflow.txt)
             
@@ -447,7 +446,7 @@ workflows:
       #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update
+      # - cloudfront-update
           # requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
+      - cleanup
+          # requires: [cloudfront-update]
