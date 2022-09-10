@@ -399,8 +399,9 @@ jobs:
           name: Get old stack workflow id
           command: |
             pwd 
-            ls ~/
+            ls 
             cd ~/
+            ls 
             cat workflow.txt
             export OldWorkflowID=$(cat workflow.txt)
             
