@@ -400,7 +400,7 @@ jobs:
           command: |
             pwd 
             ls -la 
-            cat project/.circleci/ansible/workflow.txt
+            cat .circleci/ansible/workflow.txt
             cat workflow.txt
             export OldWorkflowID=$(cat workflow.txt)
             
