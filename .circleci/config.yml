@@ -399,9 +399,8 @@ jobs:
           name: Get old stack workflow id
           command: |
             pwd 
-            ls 
-            cd ~/
-            ls 
+            ls -la 
+            cat project/.circleci/ansible/workflow.txt
             cat workflow.txt
             export OldWorkflowID=$(cat workflow.txt)
             
