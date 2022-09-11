@@ -370,7 +370,7 @@ jobs:
           command: |
             aws cloudformation \
               list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
-              --no-paginate --output text >> ./.circleci/ansible/workflow.txt
+              --no-paginate --output text | cut -d '-' -f 2 >> ./.circleci/ansible/workflow.txt
             cat ./.circleci/ansible/workflow.txt
             pwd 
             aws cloudformation deploy \
