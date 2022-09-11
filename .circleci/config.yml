@@ -376,7 +376,7 @@ jobs:
             aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name "udapeople-CloudFront" \
-            --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}" \
             --tags project=udapeople        
       - destroy-environment
       - revert-migrations
@@ -399,7 +399,6 @@ jobs:
           name: Get old stack workflow id
           command: |
             pwd 
-            ls -la 
             cat .circleci/ansible/workflow.txt
             export OldWorkflowID=$(cat .circleci/ansible/workflow.txt)
             
